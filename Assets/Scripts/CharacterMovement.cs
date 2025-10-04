@@ -32,6 +32,8 @@ public class CharacterMovement : MonoBehaviour
     private float crouchTransitionSpeed = .1f;
 
     private bool canMove = true;
+    private bool canLook = true;
+
 
     private void Start()
     {
@@ -58,6 +60,12 @@ public class CharacterMovement : MonoBehaviour
         HandleCrouch();
     }
 
+    public void BlockMovement(bool block)
+	{
+        canMove = !block;
+        canLook = !block;
+	}
+
     private void HandleMovement()
     {
         float currentSpeed = isCrouching ? crouchSpeed : Input.GetKey(KeyCode.LeftShift) ? sprintSpeed : moveSpeed;
@@ -78,6 +86,8 @@ public class CharacterMovement : MonoBehaviour
 
     private void HandleMouseLook()
     {
+        if (!canLook) return;
+
         yaw += Input.GetAxisRaw("Mouse X") * lookSensitivity;
         pitch -= Input.GetAxisRaw("Mouse Y") * lookSensitivity;
 
