@@ -64,7 +64,13 @@ public class CharacterMovement : MonoBehaviour
 	{
         canMove = !block;
         canLook = !block;
-	}
+
+		if (block)
+		{
+            velocity.x = 0;
+            velocity.z = 0;
+		}
+    }
 
     private void HandleMovement()
     {
