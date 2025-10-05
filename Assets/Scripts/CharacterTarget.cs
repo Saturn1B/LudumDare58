@@ -14,6 +14,8 @@ public class CharacterTarget : MonoBehaviour
 	[SerializeField] private Transform stick;
 	[SerializeField] private GameObject trashOnStick;
 	[SerializeField] private TMP_Text actionText;
+	[SerializeField] private ParticleSystem bloodParticle;
+	private AudioSource audioSource;
 	Quaternion baseOrientation;
 
 	bool isPicking;
@@ -22,6 +24,7 @@ public class CharacterTarget : MonoBehaviour
 	{
 		playerCamera = GetComponentInChildren<Camera>().transform;
 		characterMovement = GetComponent<CharacterMovement>();
+		audioSource = GetComponent<AudioSource>();
 		baseOrientation = hand.localRotation;
 	}
 
@@ -61,6 +64,9 @@ public class CharacterTarget : MonoBehaviour
 				InteractDumpster interact = hit.collider.transform.GetComponent<InteractDumpster>();
 				if (Input.GetKeyDown(KeyCode.E))
 				{
+					audioSource.clip = interact.trashBagSound;
+					audioSource.pitch = Random.Range(.8f, 1.2f);
+					audioSource.Play();
 					interact.Interact();
 					actionText.text = "";
 					actionText.gameObject.SetActive(false);
@@ -78,6 +84,9 @@ public class CharacterTarget : MonoBehaviour
 				InteractShed interact = hit.collider.transform.GetComponent<InteractShed>();
 				if (Input.GetKeyDown(KeyCode.E))
 				{
+					audioSource.clip = interact.audioClip;
+					audioSource.pitch = Random.Range(.8f, 1.2f);
+					audioSource.Play();
 					interact.Interact();
 					actionText.text = "";
 					actionText.gameObject.SetActive(false);
@@ -104,7 +113,14 @@ public class CharacterTarget : MonoBehaviour
 		characterMovement.BlockMovement(true);
 		yield return stick.transform.DOLocalMoveZ(stick.transform.localPosition.z + 1, .5f).WaitForCompletion();
 		interact.PickUp(trashOnStick.GetComponent<MeshRenderer>(), trashOnStick.GetComponent<MeshFilter>());
+		audioSource.clip = interact.trashSound;
+		audioSource.pitch = Random.Range(.8f, 1.2f);
+		audioSource.Play();
+		if (interact.bleed)
+			bloodParticle.Play();
 		yield return stick.transform.DOLocalMoveZ(stick.transform.localPosition.z - 1, .5f).WaitForCompletion();
+		if (interact.bleed)
+			bloodParticle.Stop();
 		trashOnStick.GetComponent<MeshRenderer>().sharedMaterial = null;
 		trashOnStick.GetComponent<MeshFilter>().mesh = null;
 		isPicking = false;

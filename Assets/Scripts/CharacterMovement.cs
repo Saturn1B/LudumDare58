@@ -34,6 +34,14 @@ public class CharacterMovement : MonoBehaviour
     private bool canMove = true;
     private bool canLook = true;
 
+    [Space]
+    [Header("Footstep")]
+    [SerializeField] private AudioClip footstepAudio;
+    private AudioSource audioSource;
+    private bool isPlayingFootsteps;
+    [SerializeField] private float walkStepRate = 0.5f;
+    [SerializeField] private float sprintStepRate = 0.3f;
+    float currentStepRate;
 
     private void Start()
     {
@@ -42,6 +50,7 @@ public class CharacterMovement : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        audioSource = GetComponent<AudioSource>();
     }
 
     private void Update()
@@ -88,6 +97,8 @@ public class CharacterMovement : MonoBehaviour
         velocity.z = moveDirection.z;
 
         characterController.Move(velocity * Time.deltaTime);
+
+        HandleFootsteps();
     }
 
     private void HandleMouseLook()
@@ -154,5 +165,41 @@ public class CharacterMovement : MonoBehaviour
             angle -= 360;
 
         return Mathf.Clamp(angle, min, max);
+    }
+
+    private void HandleFootsteps()
+    {
+        if (!characterController.isGrounded) return;
+
+        // Only play footsteps if actually moving
+        if (Input.GetAxis("Horizontal") != 0 || Input.GetAxis("Vertical") != 0)
+        {
+            currentStepRate = Input.GetKey(KeyCode.LeftShift) ? sprintStepRate : walkStepRate;
+
+            if (!isPlayingFootsteps)
+            {
+                StartCoroutine(PlayFootsteps());
+            }
+        }
+        else
+        {
+            isPlayingFootsteps = false; // stop footsteps when idle
+        }
+    }
+
+    private IEnumerator PlayFootsteps()
+    {
+        isPlayingFootsteps = true;
+        while (isPlayingFootsteps)
+        {
+            if (!characterController.isGrounded || velocity.magnitude < 0.1f)
+                break;
+
+            audioSource.pitch = Random.Range(.8f, 1.2f);
+            audioSource.PlayOneShot(footstepAudio);
+
+            yield return new WaitForSeconds(currentStepRate);
+        }
+        isPlayingFootsteps = false;
     }
 }

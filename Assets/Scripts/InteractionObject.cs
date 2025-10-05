@@ -5,6 +5,9 @@ using UnityEngine.Events;
 
 public class InteractionObject : MonoBehaviour
 {
+	public AudioClip trashSound;
+	public bool bleed;
+
 	public void PickUp(MeshRenderer renderer, MeshFilter mesh)
 	{
 		renderer.material = GetComponent<MeshRenderer>().material;
