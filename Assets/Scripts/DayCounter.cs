@@ -1,6 +1,8 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using DG.Tweening;
 
 public enum Task
 {
@@ -13,6 +15,11 @@ public class DayCounter : MonoBehaviour
 {
     [SerializeField] private TMP_Text taskTitle;
     [SerializeField] private Slider taskSlider;
+    [SerializeField] private Image transitionFade;
+    [SerializeField] private TMP_Text dayCounterText;
+    [SerializeField] private CharacterMovement characterMovement;
+    [SerializeField] private GameObject[] dailyTrashes;
+
 
     public static DayCounter Instance { get; private set; }
 
@@ -20,6 +27,9 @@ public class DayCounter : MonoBehaviour
     private float totalTrash;
 
     public Task currentTask;
+
+    private int currentDay = 0;
+    public int GetCurrentDay() { return currentDay; }
 
     private void Awake()
     {
@@ -35,7 +45,8 @@ public class DayCounter : MonoBehaviour
 
     void Start()
     {
-        StartTrashTask();
+        transitionFade.color = Color.black;
+        StartCoroutine(EndDayFade(true));
     }
 
     public void PickUpTrash()
@@ -51,8 +62,9 @@ public class DayCounter : MonoBehaviour
 		}
 	}
 
-    void StartTrashTask()
+    public void StartTrashTask()
 	{
+        dailyTrashes[currentDay - 1].SetActive(true);
         currentTask = Task.PICKUP;
         taskTitle.text = "Pick up trash in the forest";
         taskSlider.gameObject.SetActive(true);
@@ -73,5 +85,24 @@ public class DayCounter : MonoBehaviour
 	{
         currentTask = Task.REST;
         taskTitle.text = "Go rest in your cabin";
+    }
+
+    public IEnumerator EndDayFade(bool skipFadeIn = false)
+	{
+        currentTask = Task.PICKUP;
+
+        characterMovement.BlockMovement(true);
+        currentDay++;
+		if (!skipFadeIn)
+		{
+            yield return transitionFade.DOFade(1, 1).WaitForCompletion();
+        }
+        dayCounterText.gameObject.SetActive(true);
+        dayCounterText.text = $"DAY {currentDay}";
+        yield return new WaitForSeconds(1);
+        dayCounterText.gameObject.SetActive(false);
+        characterMovement.BlockMovement(false);
+        StartTrashTask();
+        yield return transitionFade.DOFade(0, 1).WaitForCompletion();
     }
 }

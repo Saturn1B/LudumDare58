@@ -34,7 +34,7 @@ public class CharacterTarget : MonoBehaviour
 			Debug.DrawRay(playerCamera.position, playerCamera.forward * playerReach, Color.green, 1);
 			Debug.Log(hit.collider.transform.name);
 
-			if (hit.collider.transform.GetComponent<InteractionObject>())
+			if (hit.collider.transform.GetComponent<InteractionObject>() && DayCounter.Instance.currentTask == Task.PICKUP)
 			{
 				if (!actionText.gameObject.activeSelf)
 				{
@@ -44,7 +44,7 @@ public class CharacterTarget : MonoBehaviour
 
 				InteractionObject interact = hit.collider.transform.GetComponent<InteractionObject>();
 				hand.LookAt(interact.GetComponent<Transform>().position - Vector3.up + playerCamera.transform.forward * 4, hand.transform.up);
-				if (Input.GetKey(KeyCode.Mouse0) && !isPicking)
+				if (Input.GetKeyDown(KeyCode.Mouse0) && !isPicking)
 				{
 					StartCoroutine(PickUpAnim(interact));
 				}
@@ -59,7 +59,24 @@ public class CharacterTarget : MonoBehaviour
 				}
 
 				InteractDumpster interact = hit.collider.transform.GetComponent<InteractDumpster>();
-				if (Input.GetKey(KeyCode.E))
+				if (Input.GetKeyDown(KeyCode.E))
+				{
+					interact.Interact();
+					actionText.text = "";
+					actionText.gameObject.SetActive(false);
+				}
+			}
+
+			if (hit.collider.transform.GetComponent<InteractShed>() && DayCounter.Instance.currentTask == Task.REST)
+			{
+				if (!actionText.gameObject.activeSelf)
+				{
+					actionText.text = "E to go rest";
+					actionText.gameObject.SetActive(true);
+				}
+
+				InteractShed interact = hit.collider.transform.GetComponent<InteractShed>();
+				if (Input.GetKeyDown(KeyCode.E))
 				{
 					interact.Interact();
 					actionText.text = "";

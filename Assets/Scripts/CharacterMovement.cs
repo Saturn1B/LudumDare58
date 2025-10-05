@@ -57,7 +57,7 @@ public class CharacterMovement : MonoBehaviour
         }
 
         HandleMovement();
-        HandleCrouch();
+        //HandleCrouch();
     }
 
     public void BlockMovement(bool block)
@@ -109,10 +109,10 @@ public class CharacterMovement : MonoBehaviour
         {
             velocity.y = -.5f;
 
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                velocity.y = jumpHeight;
-            }
+            //if (Input.GetKeyDown(KeyCode.Space))
+            //{
+            //    velocity.y = jumpHeight;
+            //}
         }
         else
         {
