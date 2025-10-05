@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 using DG.Tweening;
 
 public class CharacterTarget : MonoBehaviour
@@ -12,6 +13,7 @@ public class CharacterTarget : MonoBehaviour
 	[SerializeField] private Transform hand;
 	[SerializeField] private Transform stick;
 	[SerializeField] private GameObject trashOnStick;
+	[SerializeField] private TMP_Text actionText;
 	Quaternion baseOrientation;
 
 	bool isPicking;
@@ -31,11 +33,38 @@ public class CharacterTarget : MonoBehaviour
 		{
 			Debug.DrawRay(playerCamera.position, playerCamera.forward * playerReach, Color.green, 1);
 			Debug.Log(hit.collider.transform.name);
-			InteractionObject interact = hit.collider.transform.GetComponent<InteractionObject>();
-			hand.LookAt(interact.GetComponent<Transform>().position - Vector3.up + playerCamera.transform.forward * 4, hand.transform.up);
-			if (Input.GetKey(KeyCode.Mouse0) && !isPicking)
+
+			if (hit.collider.transform.GetComponent<InteractionObject>())
 			{
-				StartCoroutine(PickUpAnim(interact));
+				if (!actionText.gameObject.activeSelf)
+				{
+					actionText.text = "Left Clic to pick trash";
+					actionText.gameObject.SetActive(true);
+				}
+
+				InteractionObject interact = hit.collider.transform.GetComponent<InteractionObject>();
+				hand.LookAt(interact.GetComponent<Transform>().position - Vector3.up + playerCamera.transform.forward * 4, hand.transform.up);
+				if (Input.GetKey(KeyCode.Mouse0) && !isPicking)
+				{
+					StartCoroutine(PickUpAnim(interact));
+				}
+			}
+
+			if (hit.collider.transform.GetComponent<InteractDumpster>() && DayCounter.Instance.currentTask == Task.THROW)
+			{
+				if (!actionText.gameObject.activeSelf)
+				{
+					actionText.text = "E to throw trash";
+					actionText.gameObject.SetActive(true);
+				}
+
+				InteractDumpster interact = hit.collider.transform.GetComponent<InteractDumpster>();
+				if (Input.GetKey(KeyCode.E))
+				{
+					interact.Interact();
+					actionText.text = "";
+					actionText.gameObject.SetActive(false);
+				}
 			}
 		}
 		else
@@ -43,6 +72,12 @@ public class CharacterTarget : MonoBehaviour
 			Debug.DrawRay(playerCamera.position, playerCamera.forward * playerReach, Color.red, 1);
 			if (hand.localRotation != baseOrientation)
 				hand.localRotation = baseOrientation;
+
+			if (actionText.gameObject.activeSelf)
+			{
+				actionText.text = "";
+				actionText.gameObject.SetActive(false);
+			}
 		}
 	}
 

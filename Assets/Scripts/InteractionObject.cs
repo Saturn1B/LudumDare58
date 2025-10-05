@@ -9,6 +9,7 @@ public class InteractionObject : MonoBehaviour
 	{
 		renderer.material = GetComponent<MeshRenderer>().material;
 		mesh.mesh = GetComponent<MeshFilter>().mesh;
+		DayCounter.Instance.PickUpTrash();
 		Destroy(gameObject);
 	}
 }
