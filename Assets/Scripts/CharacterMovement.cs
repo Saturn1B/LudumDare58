@@ -184,6 +184,7 @@ public class CharacterMovement : MonoBehaviour
         else
         {
             isPlayingFootsteps = false; // stop footsteps when idle
+            StopAllCoroutines();
         }
     }
 

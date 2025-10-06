@@ -22,12 +22,15 @@ public class InteractDumpster : MonoBehaviour
 				objectsToActivate[0].SetActive(true);
 				break;
 			case 4:
+				objectsToActivate[1].SetActive(true);
 				break;
 			case 5:
 				break;
 			case 6:
+				objectsToActivate[2].SetActive(true);
 				break;
 			case 7:
+				AmbiancePlayer.Instance.PlayCreepyLoudSound();
 				break;
 			default:
 				break;
