@@ -16,6 +16,7 @@ public class CharacterTarget : MonoBehaviour
 	[SerializeField] private TMP_Text actionText;
 	[SerializeField] private ParticleSystem bloodParticle;
 	private AudioSource audioSource;
+	[SerializeField] private AudioClip creepyClip;
 	Quaternion baseOrientation;
 
 	bool isPicking;
