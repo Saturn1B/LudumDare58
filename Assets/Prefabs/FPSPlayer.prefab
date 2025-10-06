@@ -5241,7 +5241,6 @@ GameObject:
   - component: {fileID: 7753308724464867349}
   - component: {fileID: 6334023525698170745}
   - component: {fileID: 3917017392446873404}
-  - component: {fileID: 5669880981891887634}
   - component: {fileID: 3371394796280363853}
   m_Layer: 0
   m_Name: FPSPlayer
@@ -5353,28 +5352,7 @@ MonoBehaviour:
   trashOnStick: {fileID: 2665632770002628068}
   actionText: {fileID: 0}
   bloodParticle: {fileID: 3817267700325233060}
---- !u!114 &5669880981891887634
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8342106431650556681}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1a4c69f7a9d3ea43907b5765229dc85, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PSXShaderKit.PSXShaderManager
-  _TextureWarpingFactor: 1
-  _TextureWarpingMode: 0
-  _VertexGridResolution: 100
-  _VertexWobbleMode: 0
-  _UseRetroVertexLighting: 1
-  _RetroLightingNormalFactor: 0
-  _RetroLightFalloffStart: 0
-  _FlatShadingMode: 0
-  _TriangleSortMode: 0
-  _DepthDebugView: 0
+  creepyClip: {fileID: 0}
 --- !u!82 &3371394796280363853
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5579,16 +5557,16 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c1a4c69f7a9d3ea43907b5765229dc85, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Assembly-CSharp::PSXShaderKit.PSXShaderManager
   _TextureWarpingFactor: 1
   _TextureWarpingMode: 0
-  _VertexGridResolution: 50
-  _VertexWobbleMode: 1
+  _VertexGridResolution: 100
+  _VertexWobbleMode: 0
   _UseRetroVertexLighting: 1
-  _RetroLightingNormalFactor: 0.5
-  _RetroLightFalloffStart: 0.75
+  _RetroLightingNormalFactor: 0
+  _RetroLightFalloffStart: 0
   _FlatShadingMode: 0
-  _TriangleSortMode: 3
+  _TriangleSortMode: 0
   _DepthDebugView: 0
 --- !u!114 &3173262937049558629
 MonoBehaviour:
@@ -5602,8 +5580,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 433faa8b758afed4f9295b193c697276, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _PixelationFactor: 1
-  _ColorEmulationMode: 0
+  _PixelationFactor: 0.2
+  _ColorEmulationMode: 2
   _FullscreenColorDepth: {x: 256, y: 256, z: 256}
   _FullscreenDitherDepth: {x: 32, y: 32, z: 32}
   _DitheringMatrixSize: 2

@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 
 public enum Task
 {
@@ -19,6 +20,8 @@ public class DayCounter : MonoBehaviour
     [SerializeField] private TMP_Text dayCounterText;
     [SerializeField] private CharacterMovement characterMovement;
     [SerializeField] private GameObject[] dailyTrashes;
+    [SerializeField] private GameObject endCam;
+    [SerializeField] private GameObject crossairPanel, HUDPanel, transitionPanel, endPanel;
 
 
     public static DayCounter Instance { get; private set; }
@@ -70,12 +73,13 @@ public class DayCounter : MonoBehaviour
         taskSlider.gameObject.SetActive(true);
         totalTrash = FindObjectsByType<InteractionObject>(FindObjectsSortMode.None).Length;
         collectedTrash = 0;
+        taskSlider.value = collectedTrash;
     }
 
     void StartThrowTask()
 	{
         currentTask = Task.THROW;
-        taskTitle.text = "Go throw the trash in the bin";
+        taskTitle.text = "Go throw the trash in the dumpster";
         taskSlider.gameObject.SetActive(false);
         totalTrash = 0;
         collectedTrash = 0;
@@ -89,20 +93,42 @@ public class DayCounter : MonoBehaviour
 
     public IEnumerator EndDayFade(bool skipFadeIn = false)
 	{
-        currentTask = Task.PICKUP;
-
-        characterMovement.BlockMovement(true);
-        currentDay++;
-		if (!skipFadeIn)
+        if(currentDay == 7)
 		{
-            yield return transitionFade.DOFade(1, 1).WaitForCompletion();
+            characterMovement.BlockMovement(true);
+            endCam.SetActive(true);
+            characterMovement.gameObject.SetActive(false);
+
+            crossairPanel.SetActive(false);
+            HUDPanel.SetActive(false);
+            transitionPanel.SetActive(false);
+            endPanel.SetActive(true);
+
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
-        dayCounterText.gameObject.SetActive(true);
-        dayCounterText.text = $"DAY {currentDay}";
-        yield return new WaitForSeconds(1);
-        dayCounterText.gameObject.SetActive(false);
-        characterMovement.BlockMovement(false);
-        StartTrashTask();
-        yield return transitionFade.DOFade(0, 1).WaitForCompletion();
+		else
+		{
+            currentTask = Task.PICKUP;
+
+            characterMovement.BlockMovement(true);
+            currentDay++;
+            if (!skipFadeIn)
+            {
+                yield return transitionFade.DOFade(1, 1).WaitForCompletion();
+            }
+            dayCounterText.gameObject.SetActive(true);
+            dayCounterText.text = $"DAY {currentDay}";
+            yield return new WaitForSeconds(1.5f);
+            dayCounterText.gameObject.SetActive(false);
+            characterMovement.BlockMovement(false);
+            StartTrashTask();
+            yield return transitionFade.DOFade(0, 1).WaitForCompletion();
+        }
     }
+
+    public void BackToMenu()
+	{
+        SceneManager.LoadScene(0, LoadSceneMode.Single);
+	}
 }
