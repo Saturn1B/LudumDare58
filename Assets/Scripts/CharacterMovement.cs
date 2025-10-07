@@ -78,7 +78,9 @@ public class CharacterMovement : MonoBehaviour
 		{
             velocity.x = 0;
             velocity.z = 0;
-		}
+
+            StopAllCoroutines();
+        }
     }
 
     private void HandleMovement()
