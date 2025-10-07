@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 01ca544ca16827c4381c9f681d994733
+guid: 68cb34b15a617124a89ea88871cb99ce
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -117,5 +117,5 @@ AssetOrigin:
   productId: 314846
   packageName: Low Poly Medieval Environment Pack
   packageVersion: 1.0
-  assetPath: Assets/Low Poly Medieval Environment Pack/Models/Firewood_04.fbx
+  assetPath: Assets/Low Poly Medieval Environment Pack/Models/Bonfire.fbx
   uploadId: 744102
