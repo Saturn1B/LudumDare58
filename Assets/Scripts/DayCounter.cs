@@ -22,6 +22,7 @@ public class DayCounter : MonoBehaviour
     [SerializeField] private GameObject[] dailyTrashes;
     [SerializeField] private GameObject endCam;
     [SerializeField] private GameObject crossairPanel, HUDPanel, transitionPanel, endPanel;
+    [SerializeField] private GameObject[] campSmoke;
 
 
     public static DayCounter Instance { get; private set; }
@@ -110,6 +111,9 @@ public class DayCounter : MonoBehaviour
 		else
 		{
             currentTask = Task.PICKUP;
+
+            if(currentDay != 0)
+                campSmoke[currentDay - 1].SetActive(false);
 
             characterMovement.BlockMovement(true);
             currentDay++;
